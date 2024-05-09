@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/API/tracker.db
+/API/tracker.db-shm
+/API/tracker.db-wal
