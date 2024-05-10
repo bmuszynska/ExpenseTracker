@@ -1,5 +1,6 @@
-Expence Tracker app created using:
-*Asp.Net Core for API
-*.Net 8.0
-*SQLite
-*Entity Framework, migrations, code firt approach
+Expence Tracker app created using: <br>
+- Asp.Net Core for API <br>
+- .Net 8.0 <br>
+- SQLite <br>
+- Entity Framework Core, migrations, code firt approach <br>
+- Repository Parttern <br>
