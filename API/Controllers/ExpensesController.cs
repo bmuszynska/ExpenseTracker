@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,62 +9,90 @@ namespace ExpenseTracker.Controllers
     public class ExpensesController : BaseApiController
     {
         private readonly TrackerContext _context;
+        private readonly IExpenseRepository _repository;
 
-        public ExpensesController(TrackerContext context)
+        public ExpensesController(TrackerContext context, IExpenseRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         [HttpPost]
         public async Task<ActionResult<Expense>> CreateExpense(Expense expense)
         {
-            await _context.Expenses.AddAsync(expense);
-            await _context.SaveChangesAsync();
-            return Ok();
+            var expenseCheck = await _repository.GetExpenseByIdAsync(expense.Id);
+
+            if (expenseCheck != null)
+            {
+                return BadRequest($"Expense with this id {expense.Id} already exisit");
+            }
+
+            var result = await _repository.AddExpenseAsync(expense);
+
+            if (result == null)
+            {
+                return BadRequest("Failed to create expense.");
+            }
+            return expense;
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Expense>> DeleteExpense(int id)
+        public async Task<ActionResult<bool>> DeleteExpense(int id)
         {
-            var expense = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id);
+            var expense = await _repository.GetExpenseByIdAsync(id);
 
-            if (expense != null)
+            if (expense == null)
             {
-                _context.Expenses.Remove(expense);
-                var result = await _context.SaveChangesAsync();
-                return Ok();
+                return BadRequest("Expense with given id does not exsist, so it cannot be removed");
             }
 
-            return BadRequest("Expense with given id does not exsist");
+            var result = await _repository.DeleteExpenseAsync(expense);
+
+            if (!result)
+            {
+                return BadRequest("Failed to delete expense.");
+            }
+
+            return Ok();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            var expense = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == id);
+            var expense = await _repository.GetExpenseByIdAsync(id);
+
+            if (expense == null)
+            {
+                return BadRequest("Expense with given id not found");
+            }
             return expense;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Expense>>> GetExpenses()
         {
-            var expenses = await _context.Expenses.ToListAsync();
-            return expenses;
+            var expenses = await _repository.GetExpensesAsync();
+            return expenses.ToList();
         }
 
         [HttpPut]
         public async Task<ActionResult<Expense>> UpdateExpense(Expense expense)
         {
-            var expenseToUpdate = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == expense.Id);
+            var expenseCheck = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == expense.Id);
 
-            if (expenseToUpdate != null)
+            if (expenseCheck == null)
             {
-                _context.Expenses.Entry(expenseToUpdate).CurrentValues.SetValues(expense);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return BadRequest("Expense with given id does not exists, so it cannot be updated");
             }
 
-            return BadRequest("Expense with given id does not exists");
+            var result = await _repository.UpdateExpenseAsync(expense);
+
+            if (result == null)
+            {
+                return BadRequest("Failed to update expense");
+            }
+
+            return expense;
         }
     }
 }
