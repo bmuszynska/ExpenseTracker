@@ -364,3 +364,7 @@ FodyWeavers.xsd
 /API/tracker.db
 /API/tracker.db-shm
 /API/tracker.db-wal
+Client/ssl/localhost-key.pem
+Client/ssl/localhost.pem
+ssl/localhost-key.pem
+ssl/localhost.pem

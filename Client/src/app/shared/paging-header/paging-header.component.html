@@ -1,0 +1,13 @@
+<header *ngIf="totalCount && pageNumber && pageSize">
+    <span *ngIf="totalCount > 0">
+      Showing 
+      <strong>{{pageSize  * (pageNumber-1) + 1}} - 
+        {{pageSize * (pageNumber) 
+        > totalCount
+        ? totalCount
+        : pageSize * (pageNumber) 
+    }}
+      </strong> of <strong>{{totalCount}}</strong> results
+    </span>    
+    <span *ngIf="totalCount === 0">No products to show, change filters</span>  
+    </header>
