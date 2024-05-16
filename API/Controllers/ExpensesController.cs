@@ -1,20 +1,21 @@
-﻿using Core.Entities;
+﻿using API.Helpers;
+using Core.Entities;
 using Core.Interfaces;
-using Infrastructure.Data;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExpenseTracker.Controllers
 {
     public class ExpensesController : BaseApiController
     {
-        private readonly TrackerContext _context;
+        private readonly IGenericRepository<Expense> _expensesRepo;
         private readonly IExpenseRepository _repository;
 
-        public ExpensesController(TrackerContext context, IExpenseRepository repository)
+        public ExpensesController(IExpenseRepository repository, IGenericRepository<Expense> expensesRepo)
         {
-            _context = context;
             _repository = repository;
+            _expensesRepo = expensesRepo;
         }
 
         [HttpPost]
@@ -59,7 +60,8 @@ namespace ExpenseTracker.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Expense>> GetExpense(int id)
         {
-            var expense = await _repository.GetExpenseByIdAsync(id);
+            var expenseSpec = new ExpensesWithCategoriesSpecification(id);
+            var expense = await _expensesRepo.GetEntityWithSpec(expenseSpec);
 
             if (expense == null)
             {
@@ -69,29 +71,33 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Expense>>> GetExpenses()
+        public async Task<ActionResult<Pagination<Expense>>> GetExpenses([FromQuery] ExpenseSpecParams expenseParams)
         {
-            var expenses = await _repository.GetExpensesAsync();
-            return expenses.ToList();
+            var spec = new ExpensesWithCategoriesSpecification(expenseParams);
+            var countSpec = new ExpensesWithFiltersForCountSpecification(expenseParams);
+            var totalItems = await _expensesRepo.CountAsync(countSpec);
+            var expenses = await _expensesRepo.ListAsync(spec);
+            return Ok(new Pagination<Expense>(expenseParams.PageIndex, expenseParams.PageSize, totalItems, expenses));
         }
 
         [HttpPut]
         public async Task<ActionResult<Expense>> UpdateExpense(Expense expense)
         {
-            var expenseCheck = await _context.Expenses.FirstOrDefaultAsync(x => x.Id == expense.Id);
+            var expenseToUpdate = await _expensesRepo.GetEntityWithSpec(new ExpensesWithCategoriesSpecification(expense.Id));
 
-            if (expenseCheck == null)
+            if (expenseToUpdate == null)
             {
                 return BadRequest("Expense with given id does not exists, so it cannot be updated");
             }
 
-            var result = await _repository.UpdateExpenseAsync(expense);
-
-            if (result == null)
-            {
-                return BadRequest("Failed to update expense");
-            }
-
+            /* var result = await*/
+            _expensesRepo.Update(expenseToUpdate, expense);
+            _expensesRepo.Save();
+            /* if (result == null)
+             {
+                 return BadRequest("Failed to update expense");
+             }
+            */
             return expense;
         }
     }

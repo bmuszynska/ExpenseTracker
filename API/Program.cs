@@ -24,6 +24,15 @@ namespace ExpenseTracker
             });
 
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
 
             var app = builder.Build();
 
@@ -35,6 +44,8 @@ namespace ExpenseTracker
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
