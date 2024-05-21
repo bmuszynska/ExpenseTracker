@@ -13,9 +13,7 @@ namespace ExpenseTracker
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<TrackerContext>(opt =>
@@ -31,17 +29,24 @@ namespace ExpenseTracker
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+                });
+            });
+           
+            // Configure Kestrel to use HTTPS
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7217, listenOptions =>
+                {
+                    listenOptions.UseHttps("/app/ssl/certificate.pfx", "VeryStrongPassword1!");
                 });
             });
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-           /* if (app.Environment.IsDevelopment())
-            {*/
-                app.UseSwagger();
-                app.UseSwaggerUI();
-           /* }*/
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 
@@ -63,8 +68,9 @@ namespace ExpenseTracker
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error ocured during migration");
+                logger.LogError(ex, "An error occurred during migration");
             }
+
             app.Run();
         }
     }

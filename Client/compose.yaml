@@ -1,0 +1,9 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: client.dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - "4200:4200"

@@ -368,3 +368,6 @@ Client/ssl/localhost-key.pem
 Client/ssl/localhost.pem
 ssl/localhost-key.pem
 ssl/localhost.pem
+Client/docker-cheatsheet.txt
+Client/New Text Document.txt
+Client/README.Docker.md

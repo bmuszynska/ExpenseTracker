@@ -1,0 +1,30 @@
+# Stage 1: Build the Angular application
+FROM node:20.13.1-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+COPY . .
+RUN npm run build --prod
+
+# Stage 2: Run the Angular application using the Angular CLI
+FROM node:16 AS runtime
+WORKDIR /app
+
+# Copy build output and SSL certificates
+COPY --from=build /app/dist/client /app/dist/client
+COPY ssl/localhost.pem /app/ssl/localhost.pem
+COPY ssl/localhost-key.pem /app/ssl/localhost-key.pem
+
+# Install Angular CLI
+RUN npm install -g @angular/cli@16.2.14
+
+# Expose the port Angular will run on
+EXPOSE 4200
+
+# Change directory to the Angular app
+WORKDIR /app/dist/client
+
+# Start the Angular application with SSL
+CMD ng serve --host 0.0.0.0 --port 4200 --ssl --ssl-cert /app/ssl/localhost.pem --ssl-key /app/ssl/localhost-key.pem
