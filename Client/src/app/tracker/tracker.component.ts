@@ -11,19 +11,10 @@ import { TrackerParams } from '../models/trackerParams';
 export class TrackerComponent implements OnInit {
   expenses: Expense[] = [];
   categories: Category[] = [];
-  months: string[] = [];
   trackerParams = new TrackerParams();
-  sortOptions = [
-    { name: 'Date: Oldest to Newest', value: 'dateAssc' },
-    { name: 'Date: Newest to Oldest', value: 'dateDesc' },
-    { name: 'Amount: Low to High', value: 'amountAsc' },
-    { name: 'Amount: High to Low', value: 'amountDesc' },
-  ];
-
   totalCount = 0;
 
   constructor(private trackerService: TrackerService) {
-    this.months = this.generateMonthNames();
   }
 
   ngOnInit(): void {
@@ -50,37 +41,27 @@ export class TrackerComponent implements OnInit {
     });
   }
 
-  onCategorySelected(categoryId: number) {
-    this.trackerParams.categoryId = categoryId;
+  onCategorySelected(event: any) {
+    this.trackerParams.categoryId = event;
     this.getExpenses();
   }
 
-  onMonthSelected(monthId: number) {
-    this.trackerParams.month = monthId;
+  onMonthSelected(event: any) {
+    this.trackerParams.month = event;
     this.getExpenses();
   }
 
-  onSortSelected(event: any) {
-    this.trackerParams.sort = event.target.value;
+  onSortSelected(event: any){
+    this.trackerParams.sort = event;
     this.getExpenses();
   }
 
-  onPageChanged(event: any) {
-    if (this.trackerParams.pageNumber != event) {
-      this.trackerParams.pageNumber = event;
+  onPageChanged(page: number) {
+    if (this.trackerParams.pageNumber != page) {
+      this.trackerParams.pageNumber = page;
       this.getExpenses();
     }
   }
 
-  private generateMonthNames(): string[] {
-    const months: string[] = [];
-    const date = new Date();
 
-    for (let i = 0; i < 12; i++) {
-      date.setMonth(i);
-      months.push(date.toLocaleString('en-US', { month: 'long' }));
-    }
-
-    return ['Any', ...months];
-  }
 }

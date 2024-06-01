@@ -1,16 +1,10 @@
 ﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
     public class ExpenseTrackerContextSeed
     {
-
         public static async Task SeedAsync(TrackerContext context)
         {
             if (!context.Budgets.Any())
@@ -41,9 +35,7 @@ namespace Infrastructure.Data
                 context.Incomes.AddRange(incomes);
             }
 
-
             if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
-
         }
     }
 }

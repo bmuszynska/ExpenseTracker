@@ -1,0 +1,10 @@
+<div class="d-flex flex-column flex-md-row gap-2 align-items-center justify-content-top">
+    <h3>Sort by</h3>
+
+    <select (click)="onSortSelected($event)" class="mb-2">
+      <option *ngFor="let option of sortOptions" [value]="option.value">
+        {{ option.name }}
+      </option>
+    </select>
+
+  </div>

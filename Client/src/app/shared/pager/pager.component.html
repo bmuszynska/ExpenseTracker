@@ -1,12 +1,6 @@
-<pagination *ngIf="totalCount && pageSize"
-  [boundaryLinks]="true"
-  [totalItems]="totalCount"
-  [itemsPerPage]="pageSize"
-  [maxSize]="10"
-  (pageChanged)="onPagerChanged($event)"
-  previousText="&lsaquo;"
-  nextText="&rsaquo;"
-  firstText="&laquo;"
-  lastText="&raquo;"
->
-</pagination>
+<div class="d-flex justify-content-center pt-2" *ngIf="totalCount">
+  <pagination *ngIf="totalCount && pageSize" [boundaryLinks]="true" [totalItems]="totalCount" [itemsPerPage]="pageSize"
+    [maxSize]="10" (pageChanged)="onPagerChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;"
+    firstText="&laquo;" lastText="&raquo;">
+  </pagination>
+</div>
