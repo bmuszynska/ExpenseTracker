@@ -1,2 +1,21 @@
-
-<button class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModal">Add new category</button>
+<button class="btn btn-primary mb-2" data-toggle="modal" data-target="#exampleModal" (click)="openPopUp();">Add new
+  category</button>
+  <div *ngIf="categoryPopUp">
+    <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Provide new category name:</h5>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="Enter category name" [(ngModel)]="categoryName" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+            <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+  </div>

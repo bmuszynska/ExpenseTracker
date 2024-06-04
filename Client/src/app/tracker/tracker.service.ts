@@ -13,7 +13,7 @@ import { Pagination } from '../models/pagination';
 export class TrackerService {
   baseUrl = 'https://localhost:7217/api/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getExpenses(trackerParams: TrackerParams) {
     let params = new HttpParams();
@@ -41,6 +41,16 @@ export class TrackerService {
     return this.http.get<Category[]>(this.baseUrl + 'expenseCategories').pipe(
       catchError((error) => {
         console.error('Error fetching categories:', error);
+        throw error; // Rethrow or handle as needed
+      })
+    );
+  }
+
+  addCategory(name: string) {
+    console.log("inside tracker service ");
+    return this.http.post<Category[]>(this.baseUrl + 'expenseCategories?name=' + name, {}).pipe(
+      catchError((error) => {
+        console.error('Error adding category:', error);
         throw error; // Rethrow or handle as needed
       })
     );

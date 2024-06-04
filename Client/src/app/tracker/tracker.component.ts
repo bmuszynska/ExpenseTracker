@@ -9,6 +9,7 @@ import { TrackerParams } from '../models/trackerParams';
   styleUrls: ['./tracker.component.scss'],
 })
 export class TrackerComponent implements OnInit {
+
   expenses: Expense[] = [];
   categories: Category[] = [];
   trackerParams = new TrackerParams();
@@ -22,13 +23,23 @@ export class TrackerComponent implements OnInit {
     this.getCategories();
   }
 
+  onCategoryAdded(name: string) {
+    this.trackerService.addCategory(name).subscribe({
+      next: (response) =>
+        console.log(response),
+      error: (error) => console.log(error),
+    });;
+    this.ngOnInit();
+  }
+
   getExpenses() {
     this.trackerService.getExpenses(this.trackerParams).subscribe({
-      next: (response) => {this.expenses = response.data
+      next: (response) => {
+        this.expenses = response.data
         this.trackerParams.pageNumber = response.pageIndex;
         this.trackerParams.pageSize = response.pageSize;
         this.totalCount = response.count;
-      }      ,
+      },
       error: (error) => console.log(error),
     });
   }
@@ -51,7 +62,7 @@ export class TrackerComponent implements OnInit {
     this.getExpenses();
   }
 
-  onSortSelected(event: any){
+  onSortSelected(event: any) {
     this.trackerParams.sort = event;
     this.getExpenses();
   }

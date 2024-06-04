@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 
 @Component({
   selector: 'app-new-category',
@@ -7,4 +7,22 @@ import { Component } from '@angular/core';
 })
 export class NewCategoryComponent {
 
+  categoryPopUp = false;
+  categoryName = '';
+  @Output() categoryAdded = new EventEmitter<string>();
+  @Output() closed = new EventEmitter<void>();
+
+  openPopUp() {
+    this.categoryPopUp = true;
+  }
+
+  close() {
+    this.categoryPopUp = false;
+  }
+
+  save() {
+    console.log("adding new category: " + this.categoryName);
+    this.categoryAdded.emit(this.categoryName);
+    this.close();
+  }
 }
