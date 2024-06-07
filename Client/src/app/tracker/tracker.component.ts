@@ -98,4 +98,14 @@ export class TrackerComponent implements OnInit {
       this.getExpenses();
     }
   }
+
+  onCategoryDeleted(id: number) {
+    this.trackerService.deleteCategory(id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.getCategories();
+      },
+      error: (error) => console.log(error),
+    });
+  }
 }

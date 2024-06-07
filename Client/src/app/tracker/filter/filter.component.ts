@@ -6,13 +6,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent {
+
   @Input() categories?: any[];
   @Input() trackerParams: any;
   @Output() categoryIdSelected = new EventEmitter<number>();
   @Output() monthIdSelected = new EventEmitter<number>();
- 
+  @Output() categoryDeleted = new EventEmitter<number>();
+
   months: string[] = [];
-  constructor(){
+  constructor() {
     this.months = this.generateMonthNames();
   }
 
@@ -34,6 +36,11 @@ export class FilterComponent {
     }
 
     return ['Any', ...months];
+  }
+
+  onDelete(event: MouseEvent, id: number) {
+    event.stopPropagation(); 
+    this.categoryDeleted.emit(id);
   }
 
 }

@@ -16,7 +16,8 @@
         </section>
         <section class="col-3">
           <app-filter [categories]="categoriesForFilter" [trackerParams]="trackerParams"
-            (categoryIdSelected)="onCategorySelected($event)" (monthIdSelected)="onMonthSelected($event)"></app-filter>
+            (categoryIdSelected)="onCategorySelected($event)" (monthIdSelected)="onMonthSelected($event)"
+            (categoryDeleted)="onCategoryDeleted($event)"></app-filter>
         </section>
       </div>
     </div>

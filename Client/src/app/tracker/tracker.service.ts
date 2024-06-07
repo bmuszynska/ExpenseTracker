@@ -13,6 +13,7 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class TrackerService {
+
   baseUrl = 'https://localhost:7217/api/';
 
   constructor(private http: HttpClient) { }
@@ -69,12 +70,16 @@ export class TrackerService {
     return this.http.post<Expense[]>(this.baseUrl + 'expenses', payload, { headers }).pipe(
       catchError((error) => {
         console.error('Error adding expense:', error);
-        return throwError(error); // Rethrow or handle as needed
+        return throwError(error);
       })
     );
   }
 
   deleteExpense(id: number): Observable<any> {
     return this.http.delete(this.baseUrl + 'expenses/'+id);
+  }
+
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete(this.baseUrl + 'expensecategories/'+id);
   }
 }

@@ -4,10 +4,13 @@
   <div class="d-flex flex-column flex-md-row gap-2 align-items-start justify-content-top">
     <ul class="dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px"
       data-bs-theme="light">
-      <li class="dropdown-item rounded-2" *ngFor="let category of categories"
+      <li class="dropdown-item rounded-2 category-row category-content" *ngFor="let category of categories"
         [class.active]="category.id === trackerParams.categoryId" [value]="category.id"
         (click)="onCategorySelected(category.id)">
         {{ category.name }}
+        <span class="delete-icon" (click)="onDelete($event, category.id)">
+          🗑️
+        </span>
       </li>
     </ul>
     <ul class="dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px"
