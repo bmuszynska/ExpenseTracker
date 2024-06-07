@@ -1,14 +1,15 @@
-<a
-  href="#"
-  class="list-group-item list-group-item-action flex-column align-items-start"
-  *ngIf="expense"
->
-  <div class="d-flex w-100 justify-content-between">
-    <h5 class="mb-1">{{ expense.description }}</h5>
-    <h5 class="mb-1">{{ expense.amount | currency }}</h5>
-  </div>
-  <div class="d-flex w-100 justify-content-between">
-    <small>{{ expense.category.name }}</small>
-    <small>{{ expense.date }}</small>
-  </div>
+<a href="#" class="list-group-item list-group-item-action flex-column align-items-start expense-row expense-content" *ngIf="expense">
+
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ expense.description }}</h5>
+        <h5 class="mb-1">{{ expense.amount | currency }}</h5>
+      </div>
+      <div class="d-flex w-100 justify-content-between">
+        <small>{{ expense.category.name }}</small>
+        <small>{{ expense.date }}</small>
+      </div>
+      <span class="delete-icon" (click)="deleteExpense(expense.id)">
+        🗑️
+      </span>
+
 </a>

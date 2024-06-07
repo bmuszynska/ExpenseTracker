@@ -3,6 +3,7 @@ import { Expense } from '../models/expense';
 import { TrackerService } from './tracker.service';
 import { Category } from '../models/category';
 import { TrackerParams } from '../models/trackerParams';
+
 @Component({
   selector: 'app-tracker',
   templateUrl: './tracker.component.html',
@@ -12,6 +13,7 @@ export class TrackerComponent implements OnInit {
 
   expenses: Expense[] = [];
   categories: Category[] = [];
+  categoriesForFilter : Category[] = [];
   trackerParams = new TrackerParams();
   totalCount = 0;
 
@@ -25,17 +27,28 @@ export class TrackerComponent implements OnInit {
 
   onCategoryAdded(name: string) {
     this.trackerService.addCategory(name).subscribe({
-      next: (response) =>
+      next: (response) => {
         console.log(response),
+          this.getCategories();
+      },
       error: (error) => console.log(error),
-    });;
-    this.ngOnInit();
+    });
+  }
+
+  onExpenseAdded(expense: Expense) {
+    this.trackerService.addExpense(expense).subscribe({
+      next: (response) => {
+        console.log(response),
+          this.getExpenses();
+      },
+      error: (error) => console.log(error),
+    });
   }
 
   getExpenses() {
     this.trackerService.getExpenses(this.trackerParams).subscribe({
       next: (response) => {
-        this.expenses = response.data
+        this.expenses = response.data;
         this.trackerParams.pageNumber = response.pageIndex;
         this.trackerParams.pageSize = response.pageSize;
         this.totalCount = response.count;
@@ -46,8 +59,20 @@ export class TrackerComponent implements OnInit {
 
   getCategories() {
     this.trackerService.getCategories().subscribe({
-      next: (response) =>
-        (this.categories = [{ id: 0, name: 'All' }, ...response]),
+      next: (response) =>{
+        this.categories = response,
+        this.categoriesForFilter =[{ id: 0, name: 'All' }, ...this.categories];
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  onExpenseDeleted(id: number) {
+    this.trackerService.deleteExpense(id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.getExpenses();
+      },
       error: (error) => console.log(error),
     });
   }
@@ -73,6 +98,4 @@ export class TrackerComponent implements OnInit {
       this.getExpenses();
     }
   }
-
-
 }

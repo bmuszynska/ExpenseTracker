@@ -6,17 +6,16 @@
         <section class="col-9">
           <div class="d-flex flex-column flex-md-row gap-4 align-items-center justify-content-top">
             <app-sort (sortSelected)="onSortSelected($event);"></app-sort>
-            <app-new-expense></app-new-expense>
-            <app-new-category
-            (categoryAdded)="onCategoryAdded($event)"
-            ></app-new-category>
+            <app-new-expense (expenseAdded)="onExpenseAdded($event)" [categories]="categories"></app-new-expense>
+            <app-new-category (categoryAdded)="onCategoryAdded($event)"></app-new-category>
           </div>
-          <app-expense-list [expenses]="expenses"></app-expense-list>
+          <app-expense-list [expenses]="expenses"
+          (expenseDeleted)="onExpenseDeleted($event)"></app-expense-list>
           <app-pager [totalCount]="totalCount" [pageSize]="trackerParams.pageSize"
             (pageChanged)="onPageChanged($event)"></app-pager>
         </section>
         <section class="col-3">
-          <app-filter [categories]="categories" [trackerParams]="trackerParams"
+          <app-filter [categories]="categoriesForFilter" [trackerParams]="trackerParams"
             (categoryIdSelected)="onCategorySelected($event)" (monthIdSelected)="onMonthSelected($event)"></app-filter>
         </section>
       </div>

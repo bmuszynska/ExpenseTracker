@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Expense } from '../models/expense';
 import { Category } from '../models/category';
@@ -6,6 +6,8 @@ import { catchError } from 'rxjs/operators';
 import { TrackerParams } from '../models/trackerParams';
 
 import { Pagination } from '../models/pagination';
+import { Observable } from 'rxjs/internal/Observable';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -54,5 +56,25 @@ export class TrackerService {
         throw error; // Rethrow or handle as needed
       })
     );
+  }
+
+  addExpense(expense: Expense): Observable<Expense[]> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const payload = {
+      categoryId: 1,
+      description: expense.description,
+      amount: expense.amount,
+      date: expense.date
+    };
+    return this.http.post<Expense[]>(this.baseUrl + 'expenses', payload, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error adding expense:', error);
+        return throwError(error); // Rethrow or handle as needed
+      })
+    );
+  }
+
+  deleteExpense(id: number): Observable<any> {
+    return this.http.delete(this.baseUrl + 'expenses/'+id);
   }
 }

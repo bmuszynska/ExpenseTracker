@@ -1,1 +1,45 @@
-<button class="btn btn-primary mb-2"> Add new expense </button>
+<button class="btn btn-primary mb-2" (click)="openPopUp()">Add new expense</button>
+
+<div *ngIf="expensePopUp">
+    <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Provide new expense details:</h5>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="expenseForm">
+                        <div class="form-group" *ngIf="categories">
+                            <label for="category">Category</label>
+                            <select class="mb-2" formControlName="category">
+                                <option *ngFor="let category of categories" [value]="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" class="form-control" formControlName="description"
+                                placeholder="Enter description" />
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" id="amount" class="form-control" formControlName="amount"
+                                placeholder="Enter amount" />
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" class="form-control" formControlName="date" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+                    <button type="button" class="btn btn-primary" (click)="save()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+</div>

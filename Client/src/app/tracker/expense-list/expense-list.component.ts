@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-expense-list',
@@ -7,4 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class ExpenseListComponent {
   @Input() expenses?: any[];
+  @Output() expenseDeleted = new EventEmitter<number>();
+
+  onExpenseDeleted(id: number) {
+    this.expenseDeleted.emit(id);
+  }
 }

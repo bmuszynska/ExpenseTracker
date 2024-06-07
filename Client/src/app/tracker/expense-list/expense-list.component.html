@@ -1,7 +1,9 @@
 <div class="d-flex justify-content-between align-items-center">
     <div class="list-group w-100">
       <div class="col" *ngFor="let expense of expenses">
-        <app-expense-item [expense]="expense"></app-expense-item>
+        <app-expense-item [expense]="expense"
+        (expenseDeleted)="onExpenseDeleted($event)"
+        ></app-expense-item>
       </div>
     </div>
   </div>

@@ -9,11 +9,11 @@ import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { FilterComponent } from './filter/filter.component';
 import { NewCategoryComponent } from './new-category/new-category.component';
 import { NewExpenseComponent } from './new-expense/new-expense.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 
 @NgModule({
   declarations: [TrackerComponent, HeaderComponent, SortComponent, ExpenseListComponent, FilterComponent, NewCategoryComponent, NewExpenseComponent],
-  imports: [CommonModule, ExpenseItemModule, SharedModule, FormsModule],
+  imports: [CommonModule, ExpenseItemModule, SharedModule, FormsModule, ReactiveFormsModule],
   exports: [TrackerComponent],
 })
 export class TrackerModule {}
