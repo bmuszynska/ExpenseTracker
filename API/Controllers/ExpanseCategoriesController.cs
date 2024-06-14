@@ -22,20 +22,15 @@ namespace API.Controllers
         public async Task<ActionResult<ExpenseCategory>> CreateCategory(string name)
         {
             var expenseCategory = new ExpenseCategory { Name = name };
-            /* var result =await*/
-            _categoryRepository.Add(expenseCategory);
-            _categoryRepository.Save();
 
-            /* if (result == null)
-                      {
-                 return BadRequest("Failed to create expense.");
-             }*/
+            _categoryRepository.AddAsync(expenseCategory);
+            _categoryRepository.Save();
 
             return Ok(expenseCategory);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
 
@@ -56,11 +51,6 @@ namespace API.Controllers
             _categoryRepository.Delete(category);
             _categoryRepository.Save();
 
-            /*if (!result)
-                    {
-                return BadRequest("Failed to delete expense.");
-            }
-        */
             return Ok();
         }
 
@@ -78,7 +68,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            return category;
+            return Ok(category);
         }
 
         [HttpPut]

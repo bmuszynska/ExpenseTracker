@@ -15,9 +15,9 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public void Add(T entity)
+        public void AddAsync(T entity)
         {
-            _context.Set<T>().Add(entity);
+            _context.Set<T>().AddAsync(entity);
         }
 
         public async Task<int> CountAsync(ISpecification<T> spec)

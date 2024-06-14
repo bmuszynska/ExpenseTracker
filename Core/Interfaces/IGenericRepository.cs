@@ -5,7 +5,7 @@ namespace Core.Interfaces
 {
     public interface IGenericRepository<T> where T : BaseEntity
     {
-        void Add(T entity);
+        void AddAsync(T entity);
 
         Task<int> CountAsync(ISpecification<T> spec);
 
