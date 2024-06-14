@@ -5,4 +5,5 @@ Expence Tracker app created using: <br>
 - Entity Framework Core, migrations, code firt approach <br>
 - Repository Parttern <br>
 - Angular, Node.js for client app <br>
+- Unit tests created with XUnit, FluentAssertions and Moq
 
